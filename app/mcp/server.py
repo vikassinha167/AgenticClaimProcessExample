@@ -91,3 +91,7 @@ def health() -> JSONResponse:
 
 mcp = FastApiMCP(app, name="MCP Policy Server", description="Healthcare Claims Processing MCP Policy Server")
 mcp.mount_http()
+
+# The FastAPI app exposes the standard HTTP routes such as /policies, /constraints, and /fraud-score.
+# The MCP wrapper mounts its transport onto that same app at /mcp.
+application = app

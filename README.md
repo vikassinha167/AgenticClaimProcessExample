@@ -201,6 +201,8 @@ Copy `.env.example` to `.env` and update values for your environment.
 python scripts/run_mcp.py
 ```
 
+Test your deployed MCP tools using MCP Inspector (steps shown towards bottom of this file)
+
 This server exposes:
 - `GET /policies`
 - `GET /constraints`
