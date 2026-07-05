@@ -1,0 +1,17 @@
+fastapi>=0.108.0
+uvicorn[standard]>=0.24.0
+fastapi_mcp>=0.4.0
+pydantic
+# ---- Azure AI Foundry / OpenAI ----
+openai>=1.40.0
+azure-ai-projects>=1.0.0b5
+azure-ai-evaluation>=1.0.0
+azure-ai-documentintelligence>=1.0.0
+azure-search-documents>=11.0.0
+azure-identity>=1.15.0
+azure-keyvault-secrets>=4.9.0
+pydantic-settings>=2.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+aiohttp>=3.9.0
+loguru>=0.7.0

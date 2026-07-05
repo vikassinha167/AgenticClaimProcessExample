@@ -1,0 +1,29 @@
+{
+  "claim_id": "CLAIM-1001",
+  "patient_id": "PAT-12345",
+  "provider_id": "PROV-67890",
+  "billed_amount": 380.50,
+  "source": "json",
+  "metadata": {
+    "submitted_date": "2026-04-25T10:15:00Z",
+    "document_type": "EOB"
+  },
+  "services": [
+    {
+      "item_id": "SVC-001",
+      "description": "Office visit for acute upper respiratory infection",
+      "date_of_service": "2026-04-18T00:00:00Z",
+      "amount": 125.00,
+      "provider": "HealthCare Clinic",
+      "diagnosis": "J06.9"
+    },
+    {
+      "item_id": "SVC-002",
+      "description": "Comprehensive metabolic panel",
+      "date_of_service": "2026-04-18T00:00:00Z",
+      "amount": 255.50,
+      "provider": "HealthCare Clinic",
+      "diagnosis": "R53.83"
+    }
+  ]
+}
