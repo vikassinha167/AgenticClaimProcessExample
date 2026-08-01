@@ -5,7 +5,15 @@ from fastapi.responses import JSONResponse
 from fastapi_mcp import FastApiMCP
 from fastapi.middleware.cors import CORSMiddleware
 from app.mcp.policies import DEFAULT_POLICY
-from app.mcp.schemas import FraudScoreRequest, FraudScoreResponse, PolicyBundle
+from app.config import get_settings
+from app.mcp.schemas import (
+    FraudScoreRequest,
+    FraudScoreResponse,
+    PiiAnalysisRequest,
+    PiiAnalysisResponse,
+    PolicyBundle,
+)
+from app.tools.language_pii import LanguagePiiClient
 
 app = FastAPI(title="MCP Policy Server", version="1.0.0")
 
@@ -84,6 +92,12 @@ def fraud_score(request: FraudScoreRequest) -> FraudScoreResponse:
         patterns=patterns,
         reason=reason,
     )
+
+
+@app.post("/pii-analyze", response_model=PiiAnalysisResponse)
+def analyze_claim_pii(request: PiiAnalysisRequest) -> PiiAnalysisResponse:
+    result = LanguagePiiClient(get_settings()).analyze_claim(request.claim)
+    return PiiAnalysisResponse(claim_id=request.claim_id, **result)
 
 @app.get("/health")
 def health() -> JSONResponse:

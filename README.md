@@ -60,6 +60,7 @@ flowchart TD
 - `app/tools/foundry_guardrails.py` — executes Foundry guardrail evaluations.
 - `app/tools/openai_client.py` — invokes Azure AI Services-hosted OpenAI deployment.
 - `app/tools/document_intelligence.py` — uses Foundry-hosted Document Intelligence.
+- `app/tools/language_pii.py` — detects and redacts PII with Azure Language.
 - `app/tools/rules_engine.py` — fetches MCP policy and validates claims.
 - `app/tools/external_fraud_api.py` — sends claim data to the fraud scoring endpoint.
 
@@ -108,6 +109,8 @@ AZURE_FOUNDRY_SCOPE=https://cognitiveservices.azure.com/.default
 AZURE_FOUNDRY_AGENT_VERSION=1
 AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=https://<your-document-intelligence-instance>.services.ai.azure.com/
 AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME=AzureDocumentIntelligenceKey
+AZURE_LANGUAGE_ENDPOINT=https://<your-language-resource>.cognitiveservices.azure.com/
+AZURE_LANGUAGE_KEY_SECRET_NAME=AzureLanguageKey
 AZURE_KEY_VAULT_URL=https://<your-key-vault-name>.vault.azure.net/
 AZURE_KEY_VAULT_CLIENT_ID=
 AZURE_OPENAI_KEY_SECRET_NAME=AzureOpenAIKey
@@ -208,6 +211,7 @@ This server exposes:
 - `GET /constraints`
 - `GET /allowed-procedures`
 - `POST /fraud-score`
+- `POST /pii-analyze`
 - `GET /health`
 
 ### 4. Register agents in Foundry
@@ -336,31 +340,29 @@ npm install -g @modelcontextprotocol/inspector
 Please note for all the below URL, you may also replace your localhost with auto-forwarded address as well.
 In this case, 
 http://127.0.0.1:8000 (local)
-has corrosponding following forwaded address:
-https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/
+has corrosponding following forwaded address which could be checked in Terminal under "Ports" tab.
 
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/list
 
-mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/list
+3. Call the tools -
 
-OR 
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name get_policies_policies_get
 
-mcp-inspector --server-url https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp --cli --transport http --method tools/list
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name get_constraints_constraints_get
 
-3. Call the tool - 
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name get_allowed_procedures_allowed_procedures_get
 
-mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_policies_policies_get
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name health_health_get
 
-mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_constraints_constraints_get
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name fraud_score_fraud_score_post --tool-args-json '{"claim_id":"CLAIM-1001","items":[{"procedure_code":"99213","amount":1500,"provider":"P-12345","diagnosis":"routine visit"}]}'
 
-mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_allowed_procedures_allowed_procedures_get
-
-mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name fraud_score_fraud_score_post --tool-arg claim_id=CLAIM-1001 --tool-arg items='[{"procedure_code":"99213","amount":120.0,"provider":"P-12345", "diagnosis": "Liver Culture"}]'
+mcp-inspector --cli --transport http --server-url http://127.0.0.1:8000/mcp --method tools/call --tool-name analyze_claim_pii_pii_analyze_post --tool-args-json "$(jq -c '{claim_id: .claim_id, claim: .}' app/data/sample/claim_sample.json)"
 
 
 ### Steps to test MCP server via MCP Inspector UI - 
 Open a second terminal and run:
 
-mcp-inspector --transport http --server-url https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp
+mcp-inspector --transport http --server-url https://<public-address-shown-under-ports>.app.github.dev/mcp
 
 If the above command errors out with busy port, run below command - 
 

@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     azure_document_intelligence_endpoint: HttpUrl = Field(..., env="AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT")
     azure_document_intelligence_key_secret_name: str | None = Field(None, env="AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME")
 
+    azure_language_endpoint: HttpUrl = Field(..., env="AZURE_LANGUAGE_ENDPOINT")
+    azure_language_key_secret_name: str | None = Field(None, env="AZURE_LANGUAGE_KEY_SECRET_NAME")
+
     azure_key_vault_url: HttpUrl = Field(..., env="AZURE_KEY_VAULT_URL")
     azure_key_vault_client_id: str | None = Field(None, env="AZURE_KEY_VAULT_CLIENT_ID")
 

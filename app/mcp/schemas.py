@@ -48,3 +48,25 @@ class FraudScoreResponse(BaseModel):
     risk_level: str
     patterns: List[str]
     reason: str
+
+
+class PiiAnalysisRequest(BaseModel):
+    claim_id: str
+    claim: Dict[str, Any]
+
+
+class PiiEntity(BaseModel):
+    category: str
+    subcategory: Optional[str] = None
+    text: str
+    offset: int
+    length: int
+    confidence_score: float
+
+
+class PiiAnalysisResponse(BaseModel):
+    claim_id: str
+    has_pii: bool
+    entity_count: int
+    entities: List[PiiEntity]
+    redacted_claim: str
