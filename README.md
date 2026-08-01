@@ -340,21 +340,21 @@ has corrosponding following forwaded address:
 https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/
 
 
-mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/list
+mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/list
 
 OR 
 
-mcp-inspector https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp --cli --transport http --method tools/list
+mcp-inspector --server-url https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp --cli --transport http --method tools/list
 
 3. Call the tool - 
 
-mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_policies_policies_get
+mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_policies_policies_get
 
-mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_constraints_constraints_get
+mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_constraints_constraints_get
 
-mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_allowed_procedures_allowed_procedures_get
+mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_allowed_procedures_allowed_procedures_get
 
-mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name fraud_score_fraud_score_post --tool-arg claim_id=CLAIM-1001 --tool-arg items='[{"procedure_code":"99213","amount":120.0,"provider":"P-12345", "diagnosis": "Liver Culture"}]'
+mcp-inspector --server-url http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name fraud_score_fraud_score_post --tool-arg claim_id=CLAIM-1001 --tool-arg items='[{"procedure_code":"99213","amount":120.0,"provider":"P-12345", "diagnosis": "Liver Culture"}]'
 
 
 ### Steps to test MCP server via MCP Inspector UI - 
