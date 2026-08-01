@@ -5,7 +5,6 @@ from typing import List
 
 from app.config import Settings
 from app.models import CodingResult, FraudResult, ValidationResult
-from app.tools.ai_search import FraudSearchClient
 from app.tools.external_fraud_api import ExternalFraudApiClient
 from app.tools.foundry_sdk import FoundryClient
 
@@ -18,15 +17,14 @@ class FraudDetectionAgent:
 
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("FraudDetectionAgent")
-        self.search_client = FraudSearchClient(settings)
         self.external_api = ExternalFraudApiClient(settings)
         self.foundry = FoundryClient(settings)
 
     async def assess(self, coding_result: CodingResult, validation_result: ValidationResult) -> FraudResult:
         self.logger.debug("FraudDetectionAgent assessing %s", coding_result.claim_id)
-        patterns = await self.search_client.query_patterns(coding_result)
         external = await self.external_api.score_claim(coding_result)
         score = float(external.get("fraud_score", 0.0))
+        patterns: list[str] = []
         flagged = score >= 0.75 or bool(patterns)
         confidence = min(1.0, score * 0.9 + (len(patterns) * 0.05))
         fraud_result = FraudResult(

@@ -89,7 +89,7 @@ flowchart TD
 ## Required Azure Resources
 
 - Azure AI Foundry project
-- Azure AI Services endpoint for OpenAI and Search with Azure AD auth
+- Azure AI Services endpoint for OpenAI with Azure AD auth
 - Azure AI Foundry endpoint for guardrail evaluation and agent registration
 - Azure Document Intelligence endpoint for document extraction
 - Optional: Foundry Guardrails configured in the Foundry project
@@ -101,8 +101,6 @@ Create `.env` from `.env.example` and populate:
 ```text
 AZURE_AI_SERVICES_ENDPOINT=https://<your-ai-services-endpoint>.cognitiveservices.azure.com/
 AZURE_OPENAI_DEPLOYMENT=gpt-4o
-AZURE_SEARCH_ENDPOINT=https://<your-search-service>.search.windows.net
-AZURE_SEARCH_INDEX=healthcare-fraud-index
 AZURE_FOUNDRY_ENDPOINT=https://<your-project-name>.services.ai.azure.com/api/projects/<project-name>
 AZURE_FOUNDRY_PROJECT_ID=<your-foundry-project-id>
 AZURE_FOUNDRY_SCOPE=https://cognitiveservices.azure.com/.default
@@ -115,7 +113,6 @@ AZURE_KEY_VAULT_URL=https://<your-key-vault-name>.vault.azure.net/
 AZURE_KEY_VAULT_CLIENT_ID=
 AZURE_OPENAI_KEY_SECRET_NAME=AzureOpenAIKey
 AZURE_FORM_RECOGNIZER_KEY_SECRET_NAME=AzureFormRecognizerKey
-AZURE_SEARCH_KEY_SECRET_NAME=AzureSearchKey
 AZURE_FOUNDRY_KEY_SECRET_NAME=AzureFoundryKey
 FRAUD_API_URL=http://127.0.0.1:8000/fraud-score
 FRAUD_API_KEY=

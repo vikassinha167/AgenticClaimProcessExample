@@ -14,9 +14,6 @@ class Settings(BaseSettings):
     azure_ai_services_endpoint: HttpUrl = Field(..., env="AZURE_AI_SERVICES_ENDPOINT")
     azure_openai_deployment: str = Field(..., env="AZURE_OPENAI_DEPLOYMENT")
 
-    azure_search_endpoint: HttpUrl = Field(..., env="AZURE_SEARCH_ENDPOINT")
-    azure_search_index: str = Field(..., env="AZURE_SEARCH_INDEX")
-
     azure_foundry_project_id: str = Field(..., env="AZURE_FOUNDRY_PROJECT_ID")
     azure_foundry_endpoint: HttpUrl = Field(..., env="AZURE_FOUNDRY_ENDPOINT")
     azure_foundry_scope: str = Field(default="https://cognitiveservices.azure.com/.default", env="AZURE_FOUNDRY_SCOPE")
@@ -33,7 +30,6 @@ class Settings(BaseSettings):
 
     azure_openai_key_secret_name: str = Field("AzureOpenAIKey", env="AZURE_OPENAI_KEY_SECRET_NAME")
     azure_form_recognizer_key_secret_name: str = Field("AzureFormRecognizerKey", env="AZURE_FORM_RECOGNIZER_KEY_SECRET_NAME")
-    azure_search_key_secret_name: str = Field("AzureSearchKey", env="AZURE_SEARCH_KEY_SECRET_NAME")
     azure_foundry_key_secret_name: str = Field("AzureFoundryKey", env="AZURE_FOUNDRY_KEY_SECRET_NAME")
 
     fraud_api_url: HttpUrl = Field(..., env="FRAUD_API_URL")
@@ -64,7 +60,6 @@ class Settings(BaseSettings):
     def validate_required_secrets(self) -> None:
         secret_names = [
             self.azure_openai_key_secret_name,
-            self.azure_search_key_secret_name,
             self.azure_document_intelligence_key_secret_name,
             self.azure_language_key_secret_name,
             self.azure_foundry_key_secret_name,
