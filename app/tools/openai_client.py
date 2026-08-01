@@ -14,6 +14,8 @@ class FoundryOpenAIClient:
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("FoundryOpenAIClient")
         self.settings = settings
+        if not settings.azure_openai_key_secret_name:
+            raise ValueError("AZURE_OPENAI_KEY_SECRET_NAME must be configured to fetch the OpenAI key from Key Vault")
         openai_key = settings.get_secret_value(settings.azure_openai_key_secret_name)
         # self.client = OpenAI(
         #     endpoint=str(settings.azure_ai_services_endpoint),

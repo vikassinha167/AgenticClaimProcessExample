@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from functools import cached_property
 
-from azure.identity import AzureCliCredential, ChainedTokenCredential, ManagedIdentityCredential # type: ignore
+from azure.identity import DefaultAzureCredential # type: ignore
 from azure.keyvault.secrets import SecretClient # type: ignore
 from pydantic import Field, HttpUrl # type: ignore
-from pydantic_settings import BaseSettings # type: ignore
+from pydantic_settings import BaseSettings, SettingsConfigDict # type: ignore
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
     # Azure environment
     azure_ai_services_endpoint: HttpUrl = Field(..., env="AZURE_AI_SERVICES_ENDPOINT")
     azure_openai_deployment: str = Field(..., env="AZURE_OPENAI_DEPLOYMENT")
@@ -46,23 +47,42 @@ class Settings(BaseSettings):
 
     @cached_property
     def key_vault_client(self) -> SecretClient:
-        credentials = []
+        credential = DefaultAzureCredential()
         if self.azure_key_vault_client_id:
-            credentials.append(ManagedIdentityCredential(client_id=self.azure_key_vault_client_id))
-        else:
-            credentials.append(ManagedIdentityCredential())
-        credentials.append(AzureCliCredential())
-        credential = ChainedTokenCredential(*credentials)
+            credential = DefaultAzureCredential(managed_identity_client_id=self.azure_key_vault_client_id)
         return SecretClient(vault_url=str(self.azure_key_vault_url), credential=credential)
 
     def get_secret_value(self, secret_name: str) -> str:
+        if not secret_name:
+            raise ValueError("A Key Vault secret name must be configured")
+
         secret = self.key_vault_client.get_secret(secret_name)
+        if not secret.value:
+            raise RuntimeError(f"Secret '{secret_name}' was not returned with a value from Key Vault")
         return secret.value
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    def validate_required_secrets(self) -> None:
+        secret_names = [
+            self.azure_openai_key_secret_name,
+            self.azure_search_key_secret_name,
+            self.azure_document_intelligence_key_secret_name,
+            self.azure_language_key_secret_name,
+            self.azure_foundry_key_secret_name,
+        ]
+        secret_names = [name for name in secret_names if name]
+
+        failures: list[str] = []
+        for secret_name in secret_names:
+            try:
+                self.get_secret_value(secret_name)
+            except Exception as exc:  # pragma: no cover - exercised in runtime path
+                failures.append(f"{secret_name}: {exc}")
+
+        if failures:
+            raise RuntimeError("Unable to resolve required Key Vault secrets: " + "; ".join(failures))
 
 
 def get_settings() -> Settings:
-    return Settings()
+    settings = Settings()
+    settings.validate_required_secrets()
+    return settings

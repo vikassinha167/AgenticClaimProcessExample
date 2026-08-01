@@ -13,6 +13,8 @@ from app.models import CodingResult
 class FraudSearchClient:
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("FraudSearchClient")
+        if not settings.azure_search_key_secret_name:
+            raise ValueError("AZURE_SEARCH_KEY_SECRET_NAME must be configured to fetch the Azure AI Search key from Key Vault")
         search_api_key = settings.get_secret_value(settings.azure_search_key_secret_name)
         self.client = SearchClient(
             endpoint=str(settings.azure_search_endpoint),
