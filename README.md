@@ -110,10 +110,9 @@ AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME=AzureDocumentIntelligenceKey
 AZURE_LANGUAGE_ENDPOINT=https://<your-language-resource>.cognitiveservices.azure.com/
 AZURE_LANGUAGE_KEY_SECRET_NAME=AzureLanguageKey
 AZURE_KEY_VAULT_URL=https://<your-key-vault-name>.vault.azure.net/
-AZURE_KEY_VAULT_CLIENT_ID=
 AZURE_OPENAI_KEY_SECRET_NAME=AzureOpenAIKey
-AZURE_FORM_RECOGNIZER_KEY_SECRET_NAME=AzureFormRecognizerKey
-AZURE_FOUNDRY_KEY_SECRET_NAME=AzureFoundryKey
+AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME=AzureDocumentIntelligenceKey
+AZURE_FOUNDRY_KEY_SECRET_NAME=AzureAIFoundryKey
 FRAUD_API_URL=http://127.0.0.1:8000/fraud-score
 FRAUD_API_KEY=
 MCP_HOST=127.0.0.1
@@ -122,7 +121,7 @@ LOG_LEVEL=INFO
 ENVIRONMENT=development
 ```
 
-This project is designed to authenticate to Azure services using managed identity for Azure Key Vault access. If you are using a user-assigned managed identity, set `AZURE_KEY_VAULT_CLIENT_ID`; otherwise leave it blank for system-assigned managed identity. For local development when managed identity is unavailable, the code falls back to Azure CLI authentication, so run `az login` first.
+This project is designed to authenticate to Azure services using Azure CLI or managed identity for Azure Key Vault access. For local development when managed identity is unavailable, the code falls back to Azure CLI authentication, so run `az login` first.
 
 ## Execution Checklist
 
