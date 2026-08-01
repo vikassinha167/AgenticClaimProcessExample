@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     azure_language_key_secret_name: str | None = Field(None, env="AZURE_LANGUAGE_KEY_SECRET_NAME")
 
     azure_key_vault_url: HttpUrl = Field(..., env="AZURE_KEY_VAULT_URL")
+    azure_key_vault_client_id: str | None = Field(None, env="AZURE_KEY_VAULT_CLIENT_ID")
 
     azure_openai_key_secret_name: str = Field("AzureOpenAIKey", env="AZURE_OPENAI_KEY_SECRET_NAME")
     azure_foundry_key_secret_name: str = Field("AzureFoundryKey", env="AZURE_FOUNDRY_KEY_SECRET_NAME")
@@ -42,6 +43,8 @@ class Settings(BaseSettings):
     @cached_property
     def key_vault_client(self) -> SecretClient:
         credential = DefaultAzureCredential()
+        if self.azure_key_vault_client_id:
+            credential = DefaultAzureCredential(managed_identity_client_id=self.azure_key_vault_client_id)
         return SecretClient(vault_url=str(self.azure_key_vault_url), credential=credential)
 
     def get_secret_value(self, secret_name: str) -> str:
