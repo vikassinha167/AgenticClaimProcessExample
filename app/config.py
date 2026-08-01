@@ -57,6 +57,24 @@ class Settings(BaseSettings):
             raise RuntimeError(f"Secret '{secret_name}' was not returned with a value from Key Vault")
         return secret.value
 
+    def get_openai_key(self) -> str:
+        return self.get_secret_value(self.azure_openai_key_secret_name)
+
+    def get_document_intelligence_key(self) -> str:
+        if not self.azure_document_intelligence_key_secret_name:
+            raise ValueError("AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME must be configured")
+        return self.get_secret_value(self.azure_document_intelligence_key_secret_name)
+
+    def get_language_key(self) -> str:
+        if not self.azure_language_key_secret_name:
+            raise ValueError("AZURE_LANGUAGE_KEY_SECRET_NAME must be configured")
+        return self.get_secret_value(self.azure_language_key_secret_name)
+
+    def get_foundry_key(self) -> str:
+        if not self.azure_foundry_key_secret_name:
+            raise ValueError("AZURE_FOUNDRY_KEY_SECRET_NAME must be configured")
+        return self.get_secret_value(self.azure_foundry_key_secret_name)
+
     def validate_required_secrets(self) -> None:
         secret_names = [
             self.azure_openai_key_secret_name,

@@ -22,7 +22,7 @@ class FoundryClient:
 
         if self.azure_foundry_key_secret_name:
             try:
-                self.foundry_api_key = settings.get_secret_value(self.azure_foundry_key_secret_name)
+                self.foundry_api_key = settings.get_foundry_key()
             except Exception as exc:
                 self.logger.warning(
                     "Unable to load Foundry API key from Key Vault secret '%s': %s",

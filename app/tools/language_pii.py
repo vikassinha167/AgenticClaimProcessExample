@@ -21,12 +21,7 @@ class LanguagePiiClient:
         )
 
     def _get_credential(self):
-        if not self.settings.azure_language_key_secret_name:
-            raise ValueError(
-                "AZURE_LANGUAGE_KEY_SECRET_NAME must be configured to fetch the Azure Language key from Key Vault"
-            )
-
-        key = self.settings.get_secret_value(self.settings.azure_language_key_secret_name)
+        key = self.settings.get_language_key()
         return AzureKeyCredential(key)
 
     def analyze_claim(self, claim: dict[str, Any]) -> dict[str, Any]:

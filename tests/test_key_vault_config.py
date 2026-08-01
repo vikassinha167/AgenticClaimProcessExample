@@ -9,8 +9,6 @@ class KeyVaultConfigTests(unittest.TestCase):
         settings = Settings(
             azure_ai_services_endpoint="https://example.openai.azure.com/",
             azure_openai_deployment="gpt-4o",
-            azure_search_endpoint="https://example.search.windows.net",
-            azure_search_index="claims-index",
             azure_foundry_project_id="project-id",
             azure_foundry_endpoint="https://example.services.ai.azure.com/api/projects/project-id",
             azure_document_intelligence_endpoint="https://example.cognitiveservices.azure.com/",
@@ -37,8 +35,6 @@ class KeyVaultConfigTests(unittest.TestCase):
         settings = Settings(
             azure_ai_services_endpoint="https://example.openai.azure.com/",
             azure_openai_deployment="gpt-4o",
-            azure_search_endpoint="https://example.search.windows.net",
-            azure_search_index="claims-index",
             azure_foundry_project_id="project-id",
             azure_foundry_endpoint="https://example.services.ai.azure.com/api/projects/project-id",
             azure_document_intelligence_endpoint="https://example.cognitiveservices.azure.com/",

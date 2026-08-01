@@ -22,12 +22,7 @@ class DocumentIntelligenceClient:
         )
 
     def _get_credential(self):
-        if not self.settings.azure_document_intelligence_key_secret_name:
-            raise ValueError(
-                "AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME must be configured to fetch the Document Intelligence key from Key Vault"
-            )
-
-        key = self.settings.get_secret_value(self.settings.azure_document_intelligence_key_secret_name)
+        key = self.settings.get_document_intelligence_key()
         return AzureKeyCredential(key)
 
     async def extract_from_document(self, document_path: str | None) -> tuple[str, dict[str, Any]]:
